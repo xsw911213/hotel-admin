@@ -1,17 +1,25 @@
 import Login from './views/Login.vue'
 import NotFound from './views/404.vue'
 import Home from './views/Home.vue'
-import Main from './views/Main.vue'
-import hotelSetting from './views/settings/hotelSetting'
-import accountSetting from './views/settings/accountSetting'
-import personalSetting from './views/settings/personalSetting'
-import begin from './views/adSetting/begin'
-import top from './views/adSetting/top'
-import bottom from './views/adSetting/bottom'
-// import echarts from './views/charts/echarts.vue'
 
-// const Shop = resolve => require(['../pages/Shop/shop'], resolve);
-// const Order = resolve => require(['../pages/Order/order'], resolve);
+// admin
+// 添加酒店
+const addHotel = resolve => require(['../src/views/admin/addHotel'], resolve);
+// 酒店列表
+const hotelList = resolve => require(['../src/views/admin/hotelList'], resolve);
+
+// hotel
+// 实时订单
+const currentOrder = resolve => require(['../src/views/hotel/currentOrder'], resolve);
+// 基本信息—页面信息设置
+const pageInfoConfig = resolve => require(['../src/views/hotel/pageInfoConfig'], resolve);
+// 基本信息—房间列表
+const roomList = resolve => require(['../src/views/hotel/roomList'], resolve);
+// 基本信息—打印机配置
+const printerSetting = resolve => require(['../src/views/hotel/printerSetting'], resolve);
+// 商品设置
+const commoditySetting = resolve => require(['../src/views/hotel/commoditySetting'], resolve);
+
 
 let routes = [
     {
@@ -27,73 +35,61 @@ let routes = [
         hidden: true
     },
     {
-        path: '*',
-        hidden: true,
-        redirect: { path: '/404' }
+        path: '/',
+        component: Home,
+        name: '',
+        //iconCls: 'fa fa-address-card',
+        leaf: true,//只有一个节点
+        children: [
+            { path: '/addHotel', component: addHotel, name: '新增酒店商户' }
+        ]
     },
-    //{ path: '/main', component: Main },
     {
         path: '/',
         component: Home,
         name: '',
+        //iconCls: 'fa fa-address-card',
         leaf: true,//只有一个节点
-        iconCls: 'el-icon-message',//图标样式class
         children: [
-            { path: '/main', component: Main, name: '主页' },
+            { path: '/hotelList', component: hotelList, name: '酒店商户列表' }
         ]
     },
     {
         path: '/',
         component: Home,
-        name: '个人设置',
+        name: '',
+        //iconCls: 'fa fa-address-card',
         leaf: true,//只有一个节点
+        children: [
+            { path: '/currentOrder', component: currentOrder, name: '实时订单' }
+        ]
+    },
+    {
+        path: '/',
+        component: Home,
+        name: '基本信息',
+        //iconCls: 'fa fa-id-card-o',
+        children: [
+            { path: '/pageInfoConfig', component: pageInfoConfig, name: '页面信息设置' },
+            { path: '/roomList', component: roomList, name: '房间列表' },
+            { path: '/printerSetting',component: printerSetting, name: '打印机设置' },
+        ]
+    },
+    {
+        path: '/',
+        component: Home,
+        name: '',
+        //iconCls: 'fa fa-address-card',
+        leaf: true,//只有一个节点
+        children: [
+            { path: '/commoditySetting', component: commoditySetting, name: '商品设置' }
+        ]
+    },
+    {
+        path: '*',
         hidden: true,
-        iconCls: 'el-icon-message',//图标样式class
-        children: [
-            { path: '/personalSetting', component: personalSetting, name: '' },
-        ]
-    },
-    {
-        path: '/',
-        component: Home,
-        name: '管理设置',
-        iconCls: 'el-icon-message',//图标样式class
-        children: [
-            { path: '/hotelSetting', component: hotelSetting, name: '酒店设置' },
-            { path: '/accountSetting', component: accountSetting, name: '账号设置' },
-        ]
-    },
-    {
-        path: '/',
-        component: Home,
-        name: '广告投放',
-        iconCls: 'fa fa-id-card-o',
-        children: [
-            { path: '/beginAd', component: begin, name: '开屏广告' },
-            { path: '/topAd', component: top, name: '上滚动条' },
-            { path: '/bottomAd', component: bottom, name: '下固定广告位' }
-        ]
+        redirect: { path: '/404' }
     }
-    // {
-    //     path: '/',
-    //     component: Home,
-    //     name: '',
-    //     iconCls: 'fa fa-address-card',
-    //     leaf: true,//只有一个节点
-    //     children: [
-    //         { path: '/page6', component: Page6, name: '导航三' }
-    //     ]
-    // },
-    // {
-    //     path: '/',
-    //     component: Home,
-    //     name: 'Charts',
-    //     iconCls: 'fa fa-bar-chart',
-    //     children: [
-    //         { path: '/echarts', component: echarts, name: 'echarts' }
-    //     ]
-    // },
-    
 ];
 
 export default routes;

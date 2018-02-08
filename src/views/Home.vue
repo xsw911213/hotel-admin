@@ -1,51 +1,45 @@
 <template>
 	<el-row class="container">
 		<el-col :span="24" class="header">
-			<el-col :span="10" class="logo" :class="collapsed?'logo-collapse-width':'logo-width'">
-				{{collapsed?'':sysName}}
+			<el-col :span="10" class="logo logo-width">
+				{{sysName}}
 			</el-col>
-			<!-- <el-col :span="10">
-				<div class="tools" @click.prevent="collapse">
-					<i class="fa fa-align-justify"></i>
-				</div>
-			</el-col> -->
 			<el-col :span="4" class="userinfo">
-				<el-dropdown trigger="click">
+				<el-dropdown trigger="hover">
 					<span class="el-dropdown-link userinfo-inner"><img :src="this.sysUserAvatar" /> {{sysUserName}}</span>
-					<el-dropdown-menu slot="dropdown" style="top:30px;">
-						<!-- <el-dropdown-item>我的消息</el-dropdown-item> -->
-						<el-dropdown-item @click.native="gotoPersonalSetting">个人中心</el-dropdown-item>
+					<el-dropdown-menu slot="dropdown">
+						<el-dropdown-item>个人中心</el-dropdown-item>
 						<el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
 					</el-dropdown-menu>
 				</el-dropdown>
 			</el-col>
 		</el-col>
 		<el-col :span="24" class="main">
-			<aside :class="collapsed?'menu-collapsed':'menu-expanded'">
+			<aside class='menu-expanded'>
 				<!--导航菜单-->
-				
-				<el-menu :default-active="$route.path" class="el-menu-vertical-demo" background-color="#545c64" text-color="#fff" @open="handleopen" @close="handleclose" @select="handleselect" unique-opened router v-show="!collapsed">
-					<template v-for="(item,index) in menuList" v-if="!item.hidden">
+				<el-menu :default-active="$route.path" class="el-menu-vertical-demo" @open="handleopen" @close="handleclose" @select="handleselect"
+					 unique-opened router >
+					<template v-for="(item,index) in $router.options.routes" v-if="!item.hidden">
 						<el-submenu :index="index+''" v-if="!item.leaf" :key="index">
 							<template slot="title"><i :class="item.iconCls"></i>{{item.name}}</template>
 							<el-menu-item v-for="child in item.children" :index="child.path" :key="child.path" v-if="!child.hidden">{{child.name}}</el-menu-item>
 						</el-submenu>
-						<el-menu-item v-if="item.leaf && item.children.length > 0" :index="item.children[0].path" :key="index"><i :class="item.iconCls"></i>{{item.children[0].name}}
+						<el-menu-item v-if="item.leaf && item.children.length > 0" :index="item.children[0].path">
+							<i :class="item.iconCls"></i>{{item.children[0].name}}
 						</el-menu-item>
 					</template>
 				</el-menu>
 			</aside>
 			<section class="content-container">
-				<el-breadcrumb separator="/" class="breadcrumb-inner">
-					<el-breadcrumb-item v-for="item in $route.matched" :to="{path:item.path}" :key="item.path">
-						{{ item.name }}
-					</el-breadcrumb-item>
-				</el-breadcrumb>
-				<div class="grid-content bg-purple-light" style="margin-top:20px;">
-					<!-- <el-col :span="24" class="breadcrumb-container">
+				<div class="grid-content bg-purple-light">
+					<el-col :span="24" class="breadcrumb-container">
 						<strong class="title">{{$route.name}}</strong>
-						
-					</el-col> -->
+						<el-breadcrumb separator="/" class="breadcrumb-inner">
+							<el-breadcrumb-item v-for="item in $route.matched" :key="item.path">
+								{{ item.name }}
+							</el-breadcrumb-item>
+						</el-breadcrumb>
+					</el-col>
 					<el-col :span="24" class="content-wrapper">
 						<transition name="fade" mode="out-in">
 							<router-view></router-view>
@@ -61,8 +55,9 @@
 	export default {
 		data() {
 			return {
-				sysName:'ADADMIN',
-				collapsed:false,
+				sysName:'远宇诚科技',
+				sysUserName: '',
+				sysUserAvatar: '',
 				form: {
 					name: '',
 					region: '',
@@ -72,8 +67,7 @@
 					type: [],
 					resource: '',
 					desc: ''
-				},
-				menuList:[],
+				}
 			}
 		},
 		methods: {
@@ -88,9 +82,6 @@
 			},
 			handleselect: function (a, b) {
 			},
-			gotoPersonalSetting(){
-				this.$router.push({ path: '/personalSetting' });
-			},
 			//退出登录
 			logout: function () {
 				var _this = this;
@@ -102,78 +93,17 @@
 				}).catch(() => {
 
 				});
-			},
-			//折叠导航栏
-			collapse:function(){
-				this.collapsed=!this.collapsed;
-			},
-			showMenu(i,status){
-				this.$refs.menuCollapsed.getElementsByClassName('submenu-hook-'+i)[0].style.display=status?'block':'none';
-			}
-		},
-		created(){
-			let _this = this;
-			// console.log(this.ajax);
-			let url = _this.host.baseUrl + '/menu'
-			var user = JSON.parse(sessionStorage.getItem('user'));
-			// console.log(user);
-			function getMenuSucc(res){
-				// console.log(res)
-				_this.menuList = res;
-			}
-			function getMenuError(error){
-				console.log(error)
-			}
 
-			_this.ajax.http('get',url,{role:user.role},getMenuSucc,getMenuError)
-			// _this.ajax.http('get',url,{userid:'02'},getMenuSucc,getMenuError,{})
-			// this.menuList = this.$router.options.routes;
-		},
-		computed:{
-			sysUserName(){
-				let user = JSON.parse(sessionStorage.getItem('user'));
-				return this.$store.state.sysUserName ? this.$store.state.sysUserName : user.name;
-			},
-			sysUserAvatar(){
-				let user = JSON.parse(sessionStorage.getItem('user'));
-				return this.$store.state.sysUserAvatar ? this.$store.state.sysUserAvatar : user.avatar;
+
 			}
 		},
 		mounted() {
-			// console.log(this.$store)
-			// let user = sessionStorage.getItem('user');
-			// if (user) {
-			// 	user = JSON.parse(user);
-			// 	this.sysUserName = user.name || '';
-			// 	this.sysUserAvatar = user.avatar || '';
-			// }
-
-			// this.sysUserName = this.USERINFO.name;
-			// this.sysUserAvatar = this.USERINFO.avatar;
-			
-			// if(this.USERINFO.name){
-			// 	this.sysUserName = this.USERINFO.name;
-			// 	this.sysUserAvatar = this.USERINFO.avatar;
-			// }else{
-			// 	let user = sessionStorage.getItem('user');
-			// 	if (user) {
-			// 		user = JSON.parse(user);
-			// 		this.sysUserName = user.name || '';
-			// 		this.sysUserAvatar = user.avatar || '';
-			// 	}
-			// }
-			
-			
-			
-			// this.sysUserName = this.$store.state.sysUserName;
-			// this.sysUserAvatar = this.$store.state.sysUserAvatar;
-
-			
-
-			// _this.USERINFO.name = data.userinfo.name;
-      // _this.USERINFO.avatar = data.userinfo.avatar;
-			
-			// console.log(this.menuList)
+			var user = sessionStorage.getItem('user');
+			if (user) {
+				user = JSON.parse(user);
+				this.sysUserName = user.name || '';
+				this.sysUserAvatar = user.avatar || '';
+			}
 
 		}
 	}
@@ -182,12 +112,7 @@
 
 <style scoped lang="scss">
 	@import '~scss_vars';
-	.el-submenu .el-menu-item:focus{
-		outline: none !important;
-	}
-	.el-menu li:focus{
-		outline: none !important;
-	}
+	
 	.container {
 		position: absolute;
 		top: 0px;
@@ -262,25 +187,6 @@
 				.el-menu{
 					height: 100%;
 				}
-				.collapsed{
-					width:60px;
-					.item{
-						position: relative;
-					}
-					.submenu{
-						position:absolute;
-						top:0px;
-						left:60px;
-						z-index:99999;
-						height:auto;
-						display:none;
-					}
-
-				}
-			}
-			.menu-collapsed{
-				flex:0 0 60px;
-				width: 60px;
 			}
 			.menu-expanded{
 				flex:0 0 230px;
@@ -308,6 +214,7 @@
 					}
 				}
 				.content-wrapper {
+					padding: 15px;
 					background-color: #fff;
 					box-sizing: border-box;
 				}
