@@ -57,20 +57,11 @@ let routes = [
     {
         path: '/',
         component: Home,
-        name: '',
-        //iconCls: 'fa fa-address-card',
-        leaf: true,//只有一个节点
-        children: [
-            { path: '/currentOrder', component: currentOrder, name: '实时订单' }
-        ]
-    },
-    {
-        path: '/',
-        component: Home,
         name: '基本信息',
         //iconCls: 'fa fa-id-card-o',
         children: [
             { path: '/pageInfoConfig', component: pageInfoConfig, name: '页面信息设置' },
+            { path: '/commoditySetting', component: commoditySetting, name: '商品设置' },
             { path: '/roomList', component: roomList, name: '房间列表' },
             { path: '/printerSetting',component: printerSetting, name: '打印机设置' },
         ]
@@ -82,7 +73,7 @@ let routes = [
         //iconCls: 'fa fa-address-card',
         leaf: true,//只有一个节点
         children: [
-            { path: '/commoditySetting', component: commoditySetting, name: '商品设置' }
+            { path: '/currentOrder', component: currentOrder, name: '实时订单' }
         ]
     },
     {

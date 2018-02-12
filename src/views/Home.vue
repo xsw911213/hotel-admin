@@ -5,8 +5,8 @@
 				{{sysName}}
 			</el-col>
 			<el-col :span="4" class="userinfo">
-				<el-dropdown trigger="hover">
-					<span class="el-dropdown-link userinfo-inner"><img :src="this.sysUserAvatar" /> {{sysUserName}}</span>
+				<el-dropdown trigger="hover" placement="bottom">
+					<span class="el-dropdown-link userinfo-inner">{{sysUserName}}</span>
 					<el-dropdown-menu slot="dropdown">
 						<el-dropdown-item>个人中心</el-dropdown-item>
 						<el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
@@ -33,7 +33,7 @@
 			<section class="content-container">
 				<div class="grid-content bg-purple-light">
 					<el-col :span="24" class="breadcrumb-container">
-						<strong class="title">{{$route.name}}</strong>
+						<!-- <strong class="title">{{$route.name}}</strong> -->
 						<el-breadcrumb separator="/" class="breadcrumb-inner">
 							<el-breadcrumb-item v-for="item in $route.matched" :key="item.path">
 								{{ item.name }}
@@ -110,7 +110,7 @@
 
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 	@import '~scss_vars';
 	
 	.container {
@@ -209,9 +209,9 @@
 						float: left;
 						color: #475669;
 					}
-					.breadcrumb-inner {
-						float: right;
-					}
+					// .breadcrumb-inner {
+					// 	float: right;
+					// }
 				}
 				.content-wrapper {
 					padding: 15px;

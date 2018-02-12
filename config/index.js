@@ -1,6 +1,28 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 var path = require('path')
 
+var os = require('os')
+var iptable = {}
+var ifaces = os.networkInterfaces()
+var net = require('net')
+
+//获取IP
+for (var dev in ifaces) {
+  ifaces[dev].forEach(function(details,alias){
+    if (details.family=='IPv4') {
+      iptable[dev+(alias?':'+alias:'')]=details.address;
+    }
+  });
+}
+var host = '';
+for (var prop in iptable){
+  if(iptable[prop] != '127.0.0.1'){
+    host = iptable[prop];
+    break
+  }
+}
+// console.log(host)
+
 module.exports = {
   build: {
     env: require('./prod.env'),
@@ -23,6 +45,7 @@ module.exports = {
   },
   dev: {
     env: require('./dev.env'),
+    host: host,
     port: 8080,
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',

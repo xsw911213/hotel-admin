@@ -17,6 +17,9 @@ export default {
 </script>
 
 <style lang="scss">
+*{
+	outline: none;
+}
 body {
 	margin: 0px;
 	padding: 0px;
