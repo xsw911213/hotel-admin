@@ -8,7 +8,8 @@ var development = {
 };
 var production = {
   baseUrl: '/api',
-  imgBaseUrl:'http://oz4rno8dv.bkt.clouddn.com/'
+  imgBaseUrl:'http://oz4rno8dv.bkt.clouddn.com/',
+  qrBaseUrl:'http://' + window.location.hostname + ':3010/#/shop'
 };
 
 
