@@ -13,11 +13,11 @@ import ajax from './api/base'
 //import 'nprogress/nprogress.css'
 import routes from './routes'
 
-import Mock from './mock'
-Mock.bootstrap();
+// import Mock from './mock'
+// Mock.bootstrap();
 import 'font-awesome/css/font-awesome.min.css'
 
-import axios from 'axios';
+// import axios from 'axios';
 
 
 Vue.use(ElementUI)
@@ -38,6 +38,10 @@ router.beforeEach((to, from, next) => {
   //NProgress.start();
   if (to.path == '/login') {
     sessionStorage.removeItem('user');
+  }
+
+  if(from.path === '/currentOrder'){
+    console.log(from);
   }
   let user = JSON.parse(sessionStorage.getItem('user'));
   if (!user && to.path != '/login') {

@@ -1,6 +1,9 @@
 <template>
 	<section>
 		<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="155px" class="demo-ruleForm">
+      <el-form-item label="酒店名称：">
+				<el-input disabled v-model="ruleForm.name" placeholder="请输入前台联系电话" style="width:300px;"></el-input>
+			</el-form-item>
       <el-form-item label="前台联系电话：">
 				<el-input v-model="ruleForm.tel" placeholder="请输入前台联系电话" style="width:300px;"></el-input>
 			</el-form-item>
@@ -19,7 +22,7 @@
 				<el-input v-model="ruleForm.marked" placeholder="请输入下单成功后提示文字" style="width:500px;"></el-input>
 			</el-form-item>
 			<el-form-item>
-				<el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
+				<el-button type="primary" @click="submitForm('ruleForm')">保存</el-button>
 				<el-button @click="resetForm('ruleForm')">重置</el-button>
 			</el-form-item>
 		</el-form>
@@ -30,11 +33,14 @@
   export default {
     data() {
       return {
+        user:{},
+        data:{},
         ruleForm: {
+          name:'',
+          tel:'',
 					delivery: false,
           startTime: '',
           endTime:'',
-          tel:'',
           marked:'您的订单我们已经收到，费用将在您退房时一并结算。'
         },
         rules: {
@@ -48,16 +54,48 @@
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            alert('submit!');
+
+            this.ajax.http('put', this.host.baseUrl + '/baseinfosetting', this.data, succ, error);
+            let _this = this;
+            function succ(res){
+              console.log(res)
+              _this.$message({
+                message: res.text,
+                type: 'success'
+              });
+            }
+
+            function error(res){
+              console.log(res)
+            }
           } else {
             console.log('error submit!!');
             return false;
-          }
+         }
         });
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();
+      },
+      init(){
+        this.user = JSON.parse(sessionStorage.getItem('user'));
+        this.ajax.http('get', this.host.baseUrl + '/baseinfosetting', {userid:this.user.userid}, succ, error);
+        let _this = this;
+        function succ(res){
+          let data = res.data;
+          _this.data = data;
+          // console.log(_this.data);
+          console.log('赋值');
+          _this.ruleForm = data.pageInfo;
+          _this.ruleForm.name = _this.user.name;
+        }
+        function error(res){
+          console.log(res);
+        }
       }
+    },
+    mounted(){
+      this.init();
     }
   }
 </script>

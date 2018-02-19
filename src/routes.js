@@ -2,6 +2,8 @@ import Login from './views/Login.vue'
 import NotFound from './views/404.vue'
 import Home from './views/Home.vue'
 
+const Main = resolve => require(['../src/views/Main'], resolve);
+
 // admin
 // 添加酒店
 const addHotel = resolve => require(['../src/views/admin/addHotel'], resolve);
@@ -41,6 +43,16 @@ let routes = [
         //iconCls: 'fa fa-address-card',
         leaf: true,//只有一个节点
         children: [
+            { path: '/main', component: Main, name: '首页' }
+        ]
+    },
+    {
+        path: '/',
+        component: Home,
+        name: '',
+        //iconCls: 'fa fa-address-card',
+        leaf: true,//只有一个节点
+        children: [
             { path: '/addHotel', component: addHotel, name: '新增酒店商户' }
         ]
     },
@@ -55,7 +67,7 @@ let routes = [
         ]
     },
     {
-        path: '/',
+        path: '/basicInfo',
         component: Home,
         name: '基本信息',
         //iconCls: 'fa fa-id-card-o',

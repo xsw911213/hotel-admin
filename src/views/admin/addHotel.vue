@@ -7,8 +7,8 @@
 			<el-form-item label="密码：" prop="password">
 				<el-input v-model="ruleForm.password" placeholder="输入密码"></el-input>
 			</el-form-item>
-			<el-form-item label="酒店名称：" prop="hotelname">
-				<el-input v-model="ruleForm.hotelname" placeholder="输入酒店名称"></el-input>
+			<el-form-item label="酒店名称：" prop="name">
+				<el-input v-model="ruleForm.name" placeholder="输入酒店名称"></el-input>
 			</el-form-item>
 			<el-form-item label="联系方式：" >
 				<el-input v-model="ruleForm.tel" placeholder="输入联系方式"></el-input>
@@ -31,7 +31,7 @@
         ruleForm: {
           username: '',
 					password: '',
-					hotelname:'',
+					name:'',
 					tel:'',
 					remark:''
         },
@@ -43,7 +43,7 @@
           password: [
             { required: true, message: '必填，请输入密码', trigger: 'blur' }
 					],
-					hotelname: [
+					name: [
             { required: true, message: '必填，请输入酒店名称', trigger: 'blur' }
           ]
         }
@@ -51,10 +51,22 @@
     },
     methods: {
       submitForm(formName) {
-				console.log(this.ruleForm.remark)
+        let _this = this;
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            
+            // accountsetting
+            this.ajax.http('post', this.host.baseUrl + '/accountsetting', this.ruleForm, addSucc, addError)
+            function addSucc(res){
+              console.log(res);
+
+              _this.$message({
+                message: res.text,
+                type: res.type
+              });
+            }
+            function addError(res){
+              console.log(222)
+            }
           } else {
             console.log('error submit!!');
             return false;

@@ -2,14 +2,15 @@ const isDugger = process.env.NODE_ENV !== 'production';
 
 // console.log(window.location.hostname)
 var development = {
-  baseUrl: 'http://127.0.0.1:3010/api',
+  baseUrl: 'http://' + window.location.hostname + ':3010/api',
   imgBaseUrl:'http://oz4rno8dv.bkt.clouddn.com/',
   qrBaseUrl:'http://' + window.location.hostname + ':3010/#/shop'
 };
 var production = {
   baseUrl: '/api',
   imgBaseUrl:'http://oz4rno8dv.bkt.clouddn.com/',
-  qrBaseUrl:'http://hotel.kuaidianfuwu.cn/#/shop'
+  qrBaseUrl:'http://hotel.xushaoweisite.com/#/shop'
+  // qrBaseUrl:'http://hotel.kuaidianfuwu.cn/#/shop'
 };
 
 

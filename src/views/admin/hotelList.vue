@@ -2,9 +2,9 @@
 	<section>
 		<div style="width:850px;">
 			<el-table :data="hotels" height="350" border style="width: 100%">
-				<el-table-column prop="userid" label="酒店ID" width="120"></el-table-column>
+				<!-- <el-table-column prop="userid" label="酒店ID" width="120"></el-table-column> -->
 				<el-table-column prop="username" label="用户名" width="120"></el-table-column>
-				<el-table-column prop="hotelname" label="酒店名称"></el-table-column>
+				<el-table-column prop="name" label="酒店名称"></el-table-column>
 				<el-table-column prop="tel" label="联系方式" width="150"></el-table-column>
 				<el-table-column fixed="right" label="操作" align="center" width="80">
 					<template slot-scope="scope">
@@ -17,7 +17,7 @@
 		<div class="sreach" style="margin:30px auto auto 100px;">
 			<el-autocomplete class="inline-input" v-model="search.val" :fetch-suggestions="querySearch" placeholder="输入查找条件" @select="handleSelect" style="width:500px" >
 				<el-select v-model="search.condition" slot="prepend" placeholder="请选择" @change="changeSearchCondition" style="width:150px">
-					<el-option label="按照酒店名查找" value="hotelname"></el-option>
+					<el-option label="按照酒店名查找" value="name"></el-option>
 					<el-option label="按照用户名查找" value="username"></el-option>
 					
 				</el-select>
@@ -32,8 +32,8 @@
 				<el-form-item label="密码：" prop="password">
 					<el-input v-model="ruleForm.password"></el-input>
 				</el-form-item>
-				<el-form-item label="酒店名称：" prop="hotelname">
-					<el-input v-model="ruleForm.hotelname"></el-input>
+				<el-form-item label="酒店名称：" prop="name">
+					<el-input v-model="ruleForm.name"></el-input>
 				</el-form-item>
 				<el-form-item label="联系方式：" >
 					<el-input v-model="ruleForm.tel"></el-input>
@@ -53,117 +53,16 @@
   export default {
     data() {
       return {
-        hotels: [
-					{
-						userid: '20160501',
-						password:'123456',
-						username:'rujia001',
-						hotelname: '如家快捷酒店（建设路店）',
-						tel: '13487652345',
-						remark:'这里是备注'
-					}, {
-						userid: '20160502',
-						password:'123456',
-						username:'hanting001',
-						hotelname: '橘子主题酒店',
-						tel: '010-80873678',
-						remark:'这里是备注'
-					}, {
-						userid: '20160504',
-						password:'123456',
-						username:'qitian001',
-						hotelname: '你懂得快捷酒店',
-						tel: '17709562456',
-						remark:'这里是备注'
-					}, {
-						userid: '20160501',
-						password:'123456',
-						username:'juzi001',
-						hotelname: '哼哼哈兮情趣酒店',
-						tel: '18880240967',
-						remark:'这里是备注'
-					}, {
-						userid: '20160508',
-						password:'123456',
-						username:'dali001',
-						hotelname: '七天快捷酒店（五七路店）',
-						tel: '010-80873678',
-						remark:'这里是备注'
-					}, {
-						userid: '20160506',
-						password:'123456',
-						username:'wang001',
-						hotelname: '汉庭快捷酒店（学院路店）',
-						tel: '010-80873678',
-						remark:'这里是备注'
-					}, {
-						userid: '20160507',
-						password:'123456',
-						username:'zhang001',
-						hotelname: '盘古七星牛逼大酒店',
-						tel: '010-80873678',
-						remark:'这里是备注'
-					},
-					{
-						userid: '20160501',
-						password:'123456',
-						username:'rujia002',
-						hotelname: '如家快捷酒店（建设路店）',
-						tel: '13487652345',
-						remark:'这里是备注'
-					}, {
-						userid: '20160502',
-						password:'123456',
-						username:'hanting002',
-						hotelname: '橘子主题酒店',
-						tel: '010-80873678',
-						remark:'这里是备注'
-					}, {
-						userid: '20160504',
-						password:'123456',
-						username:'qitian002',
-						hotelname: '你懂得快捷酒店',
-						tel: '17709562456',
-						remark:'这里是备注'
-					}, {
-						userid: '20160501',
-						password:'123456',
-						username:'juzi002',
-						hotelname: '哼哼哈兮情趣酒店',
-						tel: '18880240967',
-						remark:'这里是备注'
-					}, {
-						userid: '20160508',
-						password:'123456',
-						username:'dali002',
-						hotelname: '七天快捷酒店（五七路店）',
-						tel: '010-80873678',
-						remark:'这里是备注'
-					}, {
-						userid: '20160506',
-						password:'123456',
-						username:'wang002',
-						hotelname: '汉庭快捷酒店（学院路店）',
-						tel: '010-80873678',
-						remark:'这里是备注'
-					}, {
-						userid: '20160507',
-						password:'123456',
-						username:'zhang002',
-						hotelname: '盘古七星牛逼大酒店',
-						tel: '010-80873678',
-						remark:'这里是备注'
-					}
-				],
+        hotels: [],
 				search: {
-					condition:'hotelname',
+					condition:'name',
 					val:''
 				},
 				detailsShow: false,
 				ruleForm: {
           username: '',
 					password: '',
-					hotelname:'',
+					name:'',
 					tel:'',
 					remark:''
         },
@@ -175,7 +74,7 @@
           password: [
             { required: true, message: '必填，请输入密码', trigger: 'blur' }
 					],
-					hotelname: [
+					name: [
             { required: true, message: '必填，请输入酒店名称', trigger: 'blur' }
           ]
         }
@@ -185,12 +84,25 @@
       handleClick(row) {
 				this.ruleForm = row;
 				this.detailsShow = true;
-        console.log(row);
 			},
 			submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.detailsShow = false;
+						console.log(this.ruleForm);
+						delete this.ruleForm.value;
+						this.ajax.http('put', this.host.baseUrl + '/accountsetting',this.ruleForm,putSuccess,putError);
+						let _this = this;
+						function putSuccess(res){
+							console.log(res);
+							_this.$message({
+                message: '修改成功',
+                type: 'success'
+              });
+						}
+						function putError(res){
+							console.log(res)
+						}
+            // this.detailsShow = false;
           } else {
             console.log('error submit!!');
             return false;
@@ -217,10 +129,22 @@
 				console.log(item)
 				this.ruleForm = item;
 				this.detailsShow = true;
-      }
+			},
+			getHotels(){
+				let _this = this;
+				_this.ajax.http('get', this.host.baseUrl + '/accountsetting', {role:'master'}, getSucc, getError)
+				function getSucc(res){
+					_this.hotels = res.data;
+					_this.changeSearchCondition();
+				}
+				function getError(res){
+					console.log(222)
+				}
+			}
 		},
 		mounted(){
-			this.changeSearchCondition();
+			this.getHotels();
+			
 		}
   }
 </script>

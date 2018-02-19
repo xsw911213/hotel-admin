@@ -1,6 +1,6 @@
 <template>
 	<section>
-		main
+		责任说明：（法律说明）
 	</section>
 </template>
 

@@ -2,10 +2,10 @@
   <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" label-width="0px" class="demo-ruleForm login-container">
     <h3 class="title">系统登录</h3>
     <el-form-item prop="account">
-      <el-input type="text" v-model="ruleForm2.account" auto-complete="off" placeholder="账号"></el-input>
+      <el-input type="text" v-model="ruleForm2.account" auto-complete="off" placeholder="账号" @keyup.enter.native="handleSubmit2"></el-input>
     </el-form-item>
     <el-form-item prop="checkPass">
-      <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off" placeholder="密码"></el-input>
+      <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off" placeholder="密码" @keyup.enter.native="handleSubmit2"></el-input>
     </el-form-item>
     <el-checkbox v-model="checked" checked class="remember">记住密码</el-checkbox>
     <el-form-item style="width:100%;">
@@ -16,15 +16,17 @@
 </template>
 
 <script>
-  import { requestLogin } from '../api/api';
+  import axios from 'axios';
+  
+  // import { requestLogin } from '../api/api';
   //import NProgress from 'nprogress'
   export default {
     data() {
       return {
         logining: false,
         ruleForm2: {
-          account: 'admin',
-          checkPass: '123456'
+          account: '',
+          checkPass: ''
         },
         rules2: {
           account: [
@@ -51,19 +53,40 @@
             this.logining = true;
             //NProgress.start();
             var loginParams = { username: this.ruleForm2.account, password: this.ruleForm2.checkPass };
-            requestLogin(loginParams).then(data => {
-              this.logining = false;
-              //NProgress.done();
-              let { msg, code, user } = data;
-              if (code !== 200) {
-                this.$message({
-                  message: msg,
-                  type: 'error'
-                });
-              } else {
-                sessionStorage.setItem('user', JSON.stringify(user));
-                this.$router.push({ path: '/addHotel' });
+            axios.post(this.host.baseUrl + '/login', loginParams)
+            .then(function (response) {
+              console.log(response)
+              let data = response.data;
+              _this.logining = false;
+              if(data.status === 'success'){
+                sessionStorage.setItem('user', JSON.stringify(data.userinfo));
+    
+                localStorage.setItem('account', JSON.stringify(_this.ruleForm2.account));
+
+                // _this.$store.commit('USERNAME',data.userinfo.name);
+                // _this.$store.commit('USERAVATAR',data.userinfo.avatar);
+
+                if(_this.checked){
+                  localStorage.setItem('checkPass', JSON.stringify(_this.ruleForm2.checkPass));
+                }else{
+                  localStorage.setItem('checkPass', '');
+                }
+                
+                _this.$router.push({ path: data.path });
               }
+            })
+            .catch(function (error) {
+              console.log(error)
+              // console.log(arguments);
+              // _this.$message.error('错了哦，这是一条错误消息');
+              _this.$message({
+                showClose: true,
+                // message: error.response.data.message,
+                message:'登录失败',
+                type: 'error',
+                duration:5000
+              })
+              _this.logining = false;
             });
           } else {
             console.log('error submit!!');
@@ -71,6 +94,13 @@
           }
         });
       }
+    },
+    mounted(){
+      this.ruleForm2.account = JSON.parse(localStorage.getItem('account'));
+      this.ruleForm2.checkPass = JSON.parse(localStorage.getItem('checkPass'));
+      console.log();
+      // console.log(localStorage.getItem('account'))
+      // console.log(localStorage.getItem('checkPass'))
     }
   }
 

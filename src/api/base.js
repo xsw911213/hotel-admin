@@ -67,13 +67,13 @@ var bky  = {
     }).catch(function(error){
       //console.log(error.response.headers);
       errorFun(arguments);
-      Message({
-        showClose: true,
-        message: error.response.data.message,
-        // message:'11',
-        type: 'error',
-        duration:5000
-      })
+      // Message({
+      //   showClose: true,
+      //   message: error.response.data.message,
+      //   // message:'11',
+      //   type: 'error',
+      //   duration:5000
+      // })
       
       console.error(error);
     })
