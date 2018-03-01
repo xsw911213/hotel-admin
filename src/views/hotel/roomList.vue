@@ -73,7 +73,7 @@
 			},
 			removeRoom(index){
 				console.log(index);
-				this.$confirm('此操作并不会导致二维码失效, 是否继续?', '提示', {
+				this.$confirm('此操作会导致二维码失效, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'

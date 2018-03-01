@@ -140,7 +140,6 @@ export default {
 			this.isAdd = true;
 		},
 		saveData(){
-			console.log()
 			this.data.commodityList.forEach((item,index)=>{
 				item.id = `${index}`,
 				item.details.forEach((ite,inde)=>{
@@ -150,11 +149,11 @@ export default {
 			this.ajax.http('put', this.host.baseUrl + '/baseinfosetting', this.data, succ, error);
 			let _this = this;
 			function succ(res){
-				console.log(res)
 				_this.$message({
 					message: res.text,
 					type: 'success'
 				});
+				_this.commoditiyDetails = false;
 			}
 
 			function error(res){

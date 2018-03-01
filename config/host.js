@@ -9,8 +9,8 @@ var development = {
 var production = {
   baseUrl: '/api',
   imgBaseUrl:'http://oz4rno8dv.bkt.clouddn.com/',
-  qrBaseUrl:'http://hotel.xushaoweisite.com/#/shop'
-  // qrBaseUrl:'http://hotel.kuaidianfuwu.cn/#/shop'
+  //qrBaseUrl:'http://hotel.xushaoweisite.com/#/shop'
+  qrBaseUrl:'http://hotel.kuaidianfuwu.cn/#/shop'
 };
 
 
