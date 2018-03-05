@@ -9,7 +9,7 @@
 		<el-tabs v-model="activeName2" type="card" @tab-click="handleClick" @tab-remove="removeTab" closable style="margin-top:30px;">
 			<el-tab-pane v-for="(item,index) in commodities" :label="item.categoryName" :name="`${index}`" :key="index">
 				<div v-if="item.details.length > 0" style="width:700px">
-					<el-table :data="item.details" max-height="300" border style="width: 100%">
+					<el-table :data="item.details" height="300" border style="width: 100%">
 						<el-table-column prop="name" label="商品名称" ></el-table-column>
 						<el-table-column prop="price" label="单价" width="80"></el-table-column>
 						<el-table-column prop="unit" label="单位" width="80"></el-table-column>
@@ -25,9 +25,10 @@
 								</div>
 							</template>
 						</el-table-column>
-						<el-table-column label="操作" align="center" width="80">
+						<el-table-column label="操作" align="center" width="120">
 							<template slot-scope="scope">
 								<el-button @click="showCommodity(scope.row)" type="text" size="small">查看/修改</el-button>
+								<el-button @click="deleteCommodity(scope)" type="text" size="small">删除</el-button>
 							</template>
 						</el-table-column>
 					</el-table>
@@ -119,9 +120,16 @@ export default {
 			
 		},
 		removeTab(item){
-			let index = item - 0;
-			this.commodities.splice(index,1);
-			this.saveData();
+			this.$confirm('此操作将会删除该种类及其下所有商品, 是否继续?', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					let index = item - 0;
+					this.commodities.splice(index,1);
+					this.saveData();
+				}).catch(() => {
+			});
 		},
 		handleClick(tab, event) {
 			console.log(tab);
@@ -133,6 +141,14 @@ export default {
 			this.ruleForm = item;
 			this.commoditiyDetails = true;
 			this.isAdd = false;
+		},
+		deleteCommodity(item){
+			let _index = this.activeName2 - 0;
+			let index = item.$index;
+			// console.log(this.commodities[_index].details)
+
+			this.commodities[_index].details.splice(index,1);
+			this.saveData();
 		},
 		addNewCommoditiy(){
 			this.resetForm();
@@ -179,7 +195,7 @@ export default {
 				img:'',
 				price: '',
 				unit: '',
-				putaway: ''
+				putaway: true
 			}
 			this.commoditiyDetails = false;
 			this.isAdd = true;

@@ -1,8 +1,8 @@
 <template>
 	<section>
 		<div class="addroom" style="position:relative;width:800px">
-			<span style="display: inline-block; width: 100px; text-align: right; padding-right: 20px;">添加房间：</span>
-			<el-input v-model="addRoomlNum" placeholder="请输入房间号" @keyup.enter.native='addroom' style="width:200px;"></el-input>
+			<span style="display: inline-block; width: 100px; text-align: right; padding-right: 20px;">添加客房：</span>
+			<el-input v-model="addRoomlNum" placeholder="请输入客房号" @keyup.enter.native='addroom' style="width:200px;"></el-input>
 			<el-button type="primary" @click="addroom">添加</el-button>
 			
 		</div>
@@ -12,7 +12,7 @@
 				<!-- <el-button type="text" style="position:absolute;right:0;">导出成图片</el-button> -->
 			</h3>
 			<div v-for="(item,index) in roomList" :key="index" class="roomqr">
-				<p>{{`${item} 房间`}} <el-button type="text" @click="removeRoom(index)">删除</el-button></p>
+				<p>{{`${item} 客房`}} <el-button type="text" @click="removeRoom(index)">删除</el-button></p>
 				<div :id="`roomqr${index}`"></div>
 			</div>
 		</div>
@@ -54,7 +54,7 @@
 					for(let i = 0; i < max ; i++){
 						if(this.roomList[i] === this.addRoomlNum){
 							this.$message({
-								message: '已经有该房间了',
+								message: '已经有该客房了',
 								type: 'error'
 							});
 							return
@@ -142,8 +142,9 @@
 	}
 	.roomqr{
 		display: inline-block;
-		margin-left: 30px;
+		padding: 15px; 
 		text-align: center;
+		border-bottom: solid 2px #888888;
 		& > span{
 			display: inline-block;
 			margin-bottom: 10px;
