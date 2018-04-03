@@ -5,6 +5,7 @@
 				<!-- <el-table-column prop="userid" label="酒店ID" width="120"></el-table-column> -->
 				<el-table-column prop="username" label="用户名" width="120"></el-table-column>
 				<el-table-column prop="name" label="酒店名称"></el-table-column>
+				<el-table-column prop="rooms" label="房间数" width="100"></el-table-column>
 				<el-table-column prop="tel" label="联系方式" width="150"></el-table-column>
 				<el-table-column fixed="right" label="操作" align="center" width="80">
 					<template slot-scope="scope">
@@ -13,16 +14,17 @@
 				</el-table-column>
 			</el-table>
 		</div>
+		<p style="color:#606266;font-size:18px;">小计：总酒店数：{{hotels.length}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 总房间数：{{totalrooms}}</p>
+
 		
 		<div class="sreach" style="margin:30px auto auto 100px;">
 			<el-autocomplete class="inline-input" v-model="search.val" :fetch-suggestions="querySearch" placeholder="输入查找条件" @select="handleSelect" style="width:500px" >
 				<el-select v-model="search.condition" slot="prepend" placeholder="请选择" @change="changeSearchCondition" style="width:150px">
 					<el-option label="按照酒店名查找" value="name"></el-option>
 					<el-option label="按照用户名查找" value="username"></el-option>
-					
 				</el-select>
 				<!-- <el-button slot="append" icon="el-icon-search"></el-button> -->
-				</el-autocomplete>
+			</el-autocomplete>
 		</div>
 		<div v-show="detailsShow" style="width:600px;margin-top:30px;">
 			<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
@@ -58,6 +60,7 @@
 					condition:'name',
 					val:''
 				},
+				totalrooms: 0,
 				detailsShow: false,
 				ruleForm: {
           username: '',
@@ -82,6 +85,8 @@
 		},
 		methods: {
       handleClick(row) {
+				console.log(row);
+				
 				this.ruleForm = row;
 				this.detailsShow = true;
 			},
@@ -134,7 +139,24 @@
 				let _this = this;
 				_this.ajax.http('get', this.host.baseUrl + '/accountsetting', {role:'master'}, getSucc, getError)
 				function getSucc(res){
-					_this.hotels = res.data;
+					let data = res.data;
+					let times = data.length - 1;
+					data.forEach((item,index) => {
+						_this.ajax.http('get', _this.host.baseUrl + '/baseinfosetting', {userid:item._id}, succ, error);
+						function succ(res) {
+							data[index].rooms = res.data.roomList.length;
+							_this.totalrooms += data[index].rooms;
+							if(index === times){
+								_this.hotels = data;
+							}
+						}
+						function error(res){
+							console.log(res);
+						}
+					})
+					
+					console.log(data);
+					
 					_this.changeSearchCondition();
 				}
 				function getError(res){

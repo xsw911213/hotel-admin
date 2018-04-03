@@ -17,7 +17,7 @@
 		<br>
 		<br>
 		<br>
-		<p>远宇诚智慧科技</p>
+		<p>远宇诚智慧科技 yyczhkj@163.com</p>
 	</section>
 </template>
 
